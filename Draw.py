@@ -28,7 +28,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print ('running on device', device)
 
 if args.algo == 'dqn':
-	# force epsilon greedy == 0.01
+    # force epsilon greedy == 0.01
     algo = Algo.DQN(env.obs_space, env.act_space, eps_decay=1, device=device)
 elif args.algo == 'a2c':
     algo = Algo.ActorCritic(env.obs_space, env.act_space, device=device)
