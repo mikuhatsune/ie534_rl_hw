@@ -13,7 +13,7 @@ parser.add_argument('--algo', type=str, default='dqn', choices=['dqn', 'a2c'])
 parser.add_argument('--frame_skip', type=int, default=1, help='for Atari, skip frames by repeating action, useful for NoFrameSkip-v4 envionments')
 parser.add_argument('--frame_stack', type=int, default=4, help='for Atari, stack 4 consecutive frames together as observations')
 parser.add_argument('--save_dir', type=str, default='breakout_imgs/')
-parser.add_argument('--load', type=str, default='breakout/2000000.pth')
+parser.add_argument('--load', type=str, default='breakout_dqn/1999999.pth')
 
 args = parser.parse_args()
 
