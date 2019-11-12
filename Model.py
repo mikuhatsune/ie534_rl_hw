@@ -43,9 +43,8 @@ class SimpleCNN(nn.Module):
         self.fc_layers = []
         h0 = h0 * h0 * conv_channels[-1]
         for i, h in enumerate(n_fc):
-
-            ### <<< Your Code Here:
             # append Linear and ReLU layers
+            ### <<< Your Code Here:
             self.fc_layers.append( '???' )
             ### Your Code Ends >>>
             
