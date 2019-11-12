@@ -13120,24 +13120,30 @@ div#notebook {
 <pre><code>v1, Designed by Yuanyi Zhong, 2019
 
 </code></pre>
-<p>In this assignment, we will experiment with the (deep) reinforcement learning algorithms covered in the lecture. In particular, you will implement variants of the popular <code>DQN</code> (Deep Q-Network) [1] and <code>A2C</code> (Advantage Actor-Critic) [2] algorithms (by the same first author! orz), and test your implementation on both a small example (CartPole problem) and an Atari game (Breakout game). We focus on model-free algorithms rather than model-based ones, because neural nets are easier applicable and more popular nowadays in the model-free setting. (When the system dynamic is known or can be easily inferred, model-based can sometimes do better.)</p>
+<p>In this assignment, we will experiment with the (deep) reinforcement learning algorithms covered in the lecture. In particular, you will implement variants of the popular <code>DQN</code> (Deep Q-Network) (1) and <code>A2C</code> (Advantage Actor-Critic) (2) algorithms (by the same first author! orz), and test your implementation on both a small example (CartPole problem) and an Atari game (Breakout game). We focus on model-free algorithms rather than model-based ones, because neural nets are easier applicable and more popular nowadays in the model-free setting. (When the system dynamic is known or can be easily inferred, model-based can sometimes do better.)</p>
 <p>The assignment breaks into <strong>three parts</strong>:</p>
 <ul>
-<li><p><strong>In Part I</strong> [60 pts], you basically need to follow the instructions in this notebook to do a little bit of coding. We'll be able to see if your code trains by testing against the CartPole environment provided by the OpenAI gym package. We'll generate some plots that are required for grading.</p>
+<li><p><strong>In Part I</strong> (50 pts), you basically need to follow the instructions in this notebook to do a little bit of coding. We'll be able to see if your code trains by testing against the CartPole environment provided by the OpenAI gym package. We'll generate some plots that are required for grading.</p>
 </li>
-<li><p><strong>In Part II</strong> [30 pts], you'll copy your code onto Blue Waters (or actually any good server..), and run a much larger-scale experiment with the Breakout game. Hopefully, you can teach the computer to play Breakout in less than half a day! Share your final game score in this notebook. <strong><font color=red>This part will take at least a day. Please start early!!</font></strong></p>
+<li><p><strong>In Part II</strong> (40 pts), you'll copy your code onto Blue Waters (or actually any good server..), and run a much larger-scale experiment with the Breakout game. Hopefully, you can teach the computer to play Breakout in less than half a day! Share your final game score in this notebook. <strong><font color=red>This part will take at least a day. Please start early!!</font></strong></p>
 </li>
-<li><p><strong>In Part III</strong> [10 pts], you'll be asked to think about a few questions. These questions are mostly open-ended. Please write down your thoughts on them.</p>
+<li><p><strong>In Part III</strong> (10 pts), you'll be asked to think about a few questions. These questions are mostly open-ended. Please write down your thoughts on them.</p>
 </li>
 </ul>
-<p>Finally, after you finished everything in this notebook <strong><font color=red>(code snippets C1-C5, plots P1-P5, question answers Q1-Q5)</font></strong>, please save the notebook and print/export to an HTML file (or PDF), and submit <strong><font color=red>(1) the HTML and (2) your code (.py files) and (3) job artifacts (.log files only, pytorch models not required)</font></strong> to Compass 2g for grading.</p>
+<p>Finally, after you finished everything in this notebook <strong><font color=red>(code snippets C1-C5, plots P1-P5, question answers Q1-Q5)</font></strong>, please save the notebook, and export to a PDF (or an HTML file), and submit:</p>
+<ol>
+<li>the <strong>.ipynb notebook and exported .pdf/.html file</strong>, PDF is preferred (I usually do File -&gt; Print Preview -&gt; use Chrome's Save as PDF);</li>
+<li>your code (<strong>Algo.py, Model.py files</strong>);</li>
+<li>job artifacts (<strong>.log files</strong> only, pytorch models and images not required)
+to Compass 2g for grading.</li>
+</ol>
 <p><strong>PS: Remember to save your notebook occasionally as you work through it!</strong></p>
 <h4 id="References">References<a class="anchor-link" href="#References">&#182;</a></h4>
-<pre><code>[1] Mnih, V., Kavukcuoglu, K., Silver, D., Rusu, A.A., Veness, J., Bellemare, M.G., Graves, A., Riedmiller, M., Fidjeland, A.K., Ostrovski, G. and Petersen, S., 2015. Human-level control through deep reinforcement learning. Nature, 518(7540), p.529.
-[2] Mnih, V., Badia, A.P., Mirza, M., Graves, A., Lillicrap, T., Harley, T., Silver, D. and Kavukcuoglu, K., 2016, June. Asynchronous methods for deep reinforcement learning. In International conference on machine learning (pp. 1928-1937).
+<pre><code>(1) Mnih, V., Kavukcuoglu, K., Silver, D., Rusu, A.A., Veness, J., Bellemare, M.G., Graves, A., Riedmiller, M., Fidjeland, A.K., Ostrovski, G. and Petersen, S., 2015. Human-level control through deep reinforcement learning. Nature, 518(7540), p.529.
+(2) Mnih, V., Badia, A.P., Mirza, M., Graves, A., Lillicrap, T., Harley, T., Silver, D. and Kavukcuoglu, K., 2016, June. Asynchronous methods for deep reinforcement learning. In International conference on machine learning (pp. 1928-1937).
 
-[3] A useful tutorial: https://spinningup.openai.com/en/latest/
-[4] *Useful code references*: https://github.com/deepmind/bsuite; https://github.com/openai/baselines; https://github.com/astooke/rlpyt;
+(3) A useful tutorial: https://spinningup.openai.com/en/latest/
+(4) *Useful code references*: https://github.com/deepmind/bsuite; https://github.com/openai/baselines; https://github.com/astooke/rlpyt;
 
 </code></pre>
 <hr>
@@ -13267,7 +13273,7 @@ $$</p>
 $$
 \theta_{new} \leftarrow \arg\min_{\theta} \mathbb{E}_{(s,a,r,s')\sim D} \left( r + \gamma \max_{a'\in A} Q_{\theta_{old}}(s', a') - Q_{\theta}(s, a) \right)^2  .
 $$</p>
-<p>Therefore, with a batch of $ \{(s^i,a^i,r^i,s'^i)\}_{i=1}^N $ sampled from the replay buffer, we can build a loss function $L$ in pytorch:
+<p>Therefore, with a batch of $\{(s^i,a^i,r^i,s'^i)\}_{i=1}^N$ sampled from the replay buffer, we can build a loss function $L$ in pytorch:
 $$
 L(\theta) = \frac1N \sum_{i=1}^N \left( r^i + \gamma \max_{a'\in A} Q_{\theta_{old}}(s'^i, a') - Q_{\theta}(s^i, a^i) \right)^2
 ,
@@ -13284,7 +13290,7 @@ a = \begin{cases}
 \text{a random action $a \in A$} &amp;  \text{ with probability $\epsilon_{it}$ }.  \\
 \end{cases}
 $$
-And $ \epsilon_{it} $ is annealed, for example, linearly from $1$ to $0.01$ as training progresses until iteration $it_{\text{decay}}$:
+And $\epsilon_{it}$ is annealed, for example, linearly from $1$ to $0.01$ as training progresses until iteration $it_{\text{decay}}$:
 $$
 \epsilon_{it} = \max\Big\{ 0.01, 1 + (0.01-1)\frac{it}{it_{\text{decay}}} \Big\}.
 $$</p>
@@ -13307,7 +13313,7 @@ You can look up the pytorch document here: <a href="https://pytorch.org/docs/sta
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h5 id="C1-[5-pts]:-Complete-the-code-for-the-two-layered-fully-connected-network-class-TwoLayerFCNet-in-file-Model.py">C1 [5 pts]: Complete the code for the two layered fully connected network class <code>TwoLayerFCNet</code> in file <code>Model.py</code><a class="anchor-link" href="#C1-[5-pts]:-Complete-the-code-for-the-two-layered-fully-connected-network-class-TwoLayerFCNet-in-file-Model.py">&#182;</a></h5><p>And run the cell below to test the output shape of your module.</p>
+<h5 id="C1-(5-pts):-Complete-the-code-for-the-two-layered-fully-connected-network-class-TwoLayerFCNet-in-file-Model.py">C1 (5 pts): Complete the code for the two layered fully connected network class <code>TwoLayerFCNet</code> in file <code>Model.py</code><a class="anchor-link" href="#C1-(5-pts):-Complete-the-code-for-the-two-layered-fully-connected-network-class-TwoLayerFCNet-in-file-Model.py">&#182;</a></h5><p>And run the cell below to test the output shape of your module.</p>
 
 </div>
 </div>
@@ -13353,7 +13359,7 @@ You can look up the pytorch document here: <a href="https://pytorch.org/docs/sta
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h5 id="C2-[5-pts]:-Complete-the-code-for-$\epsilon$-greedy-exploration-strategy-in-function-DQN.act-in-file-`Algo.py'">C2 [5 pts]: Complete the code for $\epsilon$-greedy exploration strategy in function <code>DQN.act</code> in file `Algo.py'<a class="anchor-link" href="#C2-[5-pts]:-Complete-the-code-for-$\epsilon$-greedy-exploration-strategy-in-function-DQN.act-in-file-`Algo.py'">&#182;</a></h5><p>And run the cell below to test it.</p>
+<h5 id="C2-(5-pts):-Complete-the-code-for-$\epsilon$-greedy-exploration-strategy-in-function-DQN.act-in-file-`Algo.py'">C2 (5 pts): Complete the code for $\epsilon$-greedy exploration strategy in function <code>DQN.act</code> in file `Algo.py'<a class="anchor-link" href="#C2-(5-pts):-Complete-the-code-for-$\epsilon$-greedy-exploration-strategy-in-function-DQN.act-in-file-`Algo.py'">&#182;</a></h5><p>And run the cell below to test it.</p>
 
 </div>
 </div>
@@ -13413,7 +13419,7 @@ You can look up the pytorch document here: <a href="https://pytorch.org/docs/sta
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h5 id="C3-[10-pts]:-Complete-the-code-for-computing-the-loss-function-in-DQN.train-in-file-Algo.py">C3 [10 pts]: Complete the code for computing the loss function in <code>DQN.train</code> in file <code>Algo.py</code><a class="anchor-link" href="#C3-[10-pts]:-Complete-the-code-for-computing-the-loss-function-in-DQN.train-in-file-Algo.py">&#182;</a></h5><p>And run the cell below to verify your code decreses the loss value in one iteration.</p>
+<h5 id="C3-(10-pts):-Complete-the-code-for-computing-the-loss-function-in-DQN.train-in-file-Algo.py">C3 (10 pts): Complete the code for computing the loss function in <code>DQN.train</code> in file <code>Algo.py</code><a class="anchor-link" href="#C3-(10-pts):-Complete-the-code-for-computing-the-loss-function-in-DQN.train-in-file-Algo.py">&#182;</a></h5><p>And run the cell below to verify your code decreses the loss value in one iteration.</p>
 
 </div>
 </div>
@@ -13476,53 +13482,7 @@ DQN.train test passed!
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h5 id="C4-[10-pts]:-Complete-the-code-for-the-CNN-with-3-conv-layers-and-3-fc-layers-in-class-SimpleCNN-in-file-Model.py">C4 [10 pts]: Complete the code for the CNN with 3 conv layers and 3 fc layers in class <code>SimpleCNN</code> in file <code>Model.py</code><a class="anchor-link" href="#C4-[10-pts]:-Complete-the-code-for-the-CNN-with-3-conv-layers-and-3-fc-layers-in-class-SimpleCNN-in-file-Model.py">&#182;</a></h5><p>And verify the output shape with the cell below.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">## Test code</span>
-<span class="kn">from</span> <span class="nn">Model</span> <span class="k">import</span> <span class="n">SimpleCNN</span>
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="n">net</span> <span class="o">=</span> <span class="n">SimpleCNN</span><span class="p">()</span>
-<span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">84</span><span class="p">,</span> <span class="mi">84</span><span class="p">)</span>
-<span class="n">y</span> <span class="o">=</span> <span class="n">net</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="k">assert</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="s2">&quot;ERROR: network output has the wrong shape!&quot;</span>
-<span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;CNN output shape test passed!&quot;</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area">
-
-    <div class="prompt"></div>
-
-
-<div class="output_subarea output_stream output_stdout output_text">
-<pre>CNN output shape test passed!
-</pre>
-</div>
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h5 id="P1-[10-pts]:-Run-DQN-on-CartPole-and-plot-the-learning-curve-(i.e.-averaged-episodic-reward-against-env-steps).">P1 [10 pts]: Run DQN on CartPole and plot the learning curve (i.e. averaged episodic reward against env steps).<a class="anchor-link" href="#P1-[10-pts]:-Run-DQN-on-CartPole-and-plot-the-learning-curve-(i.e.-averaged-episodic-reward-against-env-steps).">&#182;</a></h5><p>Your code should be able to achieve <strong>&gt;150</strong> averaged reward in 10000 iterations (20000 simulation steps) in only a few minutes. This is a good indication that the implementation is correct. It's ok that the curve is not always monotonically increasing because of randomness in training.</p>
+<h5 id="P1-(10-pts):-Run-DQN-on-CartPole-and-plot-the-learning-curve-(i.e.-averaged-episodic-reward-against-env-steps).">P1 (10 pts): Run DQN on CartPole and plot the learning curve (i.e. averaged episodic reward against env steps).<a class="anchor-link" href="#P1-(10-pts):-Run-DQN-on-CartPole-and-plot-the-learning-curve-(i.e.-averaged-episodic-reward-against-env-steps).">&#182;</a></h5><p>Your code should be able to achieve <strong>&gt;150</strong> averaged reward in 10000 iterations (20000 simulation steps) in only a few minutes. This is a good indication that the implementation is correct. It's ok that the curve is not always monotonically increasing because of randomness in training.</p>
 
 </div>
 </div>
@@ -13709,11 +13669,11 @@ where $D^{\pi}$ is the distribution of trajectories induced by policy $\pi$, and
 $$
 \theta_{new} \leftarrow \theta_{old} + \eta { \hat \nabla_{\theta} } J(\pi_{\theta_{old}})
 $$
-with a Monte Carlo estimate $ { \hat \nabla_{\theta} } J $ of the true gradient $ \nabla_{\theta} J $. The true gradient writes as (by Policy Gradient Theorem and some manipulations):
+with a Monte Carlo estimate ${ \hat \nabla_{\theta} } J$ of the true gradient $\nabla_{\theta} J$. The true gradient writes as (by Policy Gradient Theorem and some manipulations):
 $$
 \nabla_{\theta} J(\pi_{\theta_{old}}) = \mathbb{E}_{ (s_t,a_t,r_t)\sim D^{ \pi_{\theta_{old}} } } \sum_{t=0}^{\infty} \left( \nabla_{\theta} \log \pi_{\theta_{old}} (s_t, a_t) \left( \sum_{t'=t}^{\infty} \gamma^{t'-t} r_{t'} - V^{ \pi_{\theta_{old}} }(s_t) \right) \right)  .
 $$
-The quantity in the inner-most parentheses $A(s_t, a_t) = Q(s_t, a_t) - V(s_t) = (\mathbb{E} \sum_{t'=t}^{\infty} \gamma^{t'-t} r_{t'}) - V(s_t) $ is called the <em>Advantage</em> function (not very rigoriously speaking...). That's why it's called <strong>Advantage</strong> Actor-Critic. More on A2C: <a href="https://arxiv.org/abs/1506.02438">https://arxiv.org/abs/1506.02438</a>.</p>
+The quantity in the inner-most parentheses $A(s_t, a_t) = Q(s_t, a_t) - V(s_t) = (\mathbb{E} \sum_{t'=t}^{\infty} \gamma^{t'-t} r_{t'}) - V(s_t)$ is called the <em>Advantage</em> function (not very rigoriously speaking...). That's why it's called <strong>Advantage</strong> Actor-Critic. More on A2C: <a href="https://arxiv.org/abs/1506.02438">https://arxiv.org/abs/1506.02438</a>.</p>
 <p>And the Monte Carlo estimate of the gradient is
 $$
 { \hat \nabla_{\theta} } J(\pi_{\theta_{old}}) = \frac1{NT}  \sum_{i=1}^N \sum_{t=0}^T \left( \nabla_{\theta} \log \pi_{\theta_{old}} (s_t^{i}, a_t^{i}) \left( \sum_{t'=t}^T \gamma^{t'-t} r_{t'}^{i} - V_{\phi_{old}}(s_t^{i}) \right) \right)
@@ -13721,7 +13681,7 @@ $$
 where $V_{\phi_{old}}$ is introduced as a <em>parameterized</em> estimate for $V^{ \pi_{\theta_{old}} }$, which can also be a neural network. So $V_{\phi}$ is the <strong>critic</strong> and $\pi_{\theta}$ is the <strong>actor</strong>. We can construct a specific loss function in pytorch that gives ${ \hat \nabla_{\theta} } J$. $V_{\phi_{old}}$ is trained with SGD on a L2 loss function. It's further common practice to add an entropy bonus loss term to encourage maximum entropy solution, to facilitate exploration and avoid getting stuck in local minima. We shall clarify these loss functions in the following summarization.</p>
 <h4 id="Summarizing-a-variant-of-the-A2C-algorithm:">Summarizing a variant of the A2C algorithm:<a class="anchor-link" href="#Summarizing-a-variant-of-the-A2C-algorithm:">&#182;</a></h4><blockquote><p>For many iterations repeat:</p>
 <ol>
-<li>Collect $N$ independent trajectories $ \{ (s_t^{i},a_t^{i},r_t^{i})_{t=0}^T \}_{i=1}^{N} $ by running policy $ \pi_{\theta} $ for maximum $T$ steps;</li>
+<li>Collect $N$ independent trajectories $\{ (s_t^{i},a_t^{i},r_t^{i})_{t=0}^T \}_{i=1}^{N}$ by running policy $\pi_{\theta}$ for maximum $T$ steps;</li>
 <li>Compute the loss function for the policy parameter $\theta$:
 $$
 L_{policy}(\theta) = \frac1{NT} \sum_{i=1}^N \sum_{t=0}^T \left( \log \pi_{\theta} (s_t^{i}, a_t^{i}) \left( \sum_{t'=t}^T \gamma^{t'-t} r_{t'}^{i} - V_{\phi}(s_t^{i}) \right) \right)
@@ -13748,7 +13708,7 @@ where $\lambda_{ent}$ and $\lambda_{val}$ are coefficients to balances the loss 
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h5 id="C5-[10-pts]:-Complete-the-code-for-computing-the-advantange,-entropy-and-loss-function-in-A2C.train-in-file-Algo.py">C5 [10 pts]: Complete the code for computing the advantange, entropy and loss function in <code>A2C.train</code> in file <code>Algo.py</code><a class="anchor-link" href="#C5-[10-pts]:-Complete-the-code-for-computing-the-advantange,-entropy-and-loss-function-in-A2C.train-in-file-Algo.py">&#182;</a></h5>
+<h5 id="C4-(10-pts):-Complete-the-code-for-computing-the-advantange,-entropy-and-loss-function-in-A2C.train-in-file-Algo.py">C4 (10 pts): Complete the code for computing the advantange, entropy and loss function in <code>A2C.train</code> in file <code>Algo.py</code><a class="anchor-link" href="#C4-(10-pts):-Complete-the-code-for-computing-the-advantange,-entropy-and-loss-function-in-A2C.train-in-file-Algo.py">&#182;</a></h5>
 </div>
 </div>
 </div>
@@ -13768,7 +13728,7 @@ where $\lambda_{ent}$ and $\lambda_{val}$ are coefficients to balances the loss 
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h5 id="P2-[10-pts]:-Run-A2C-on-CartPole-and-plot-the-learning-curve-(i.e.-averaged-episodic-reward-against-training-iteration).">P2 [10 pts]: Run A2C on CartPole and plot the learning curve (i.e. averaged episodic reward against training iteration).<a class="anchor-link" href="#P2-[10-pts]:-Run-A2C-on-CartPole-and-plot-the-learning-curve-(i.e.-averaged-episodic-reward-against-training-iteration).">&#182;</a></h5><p>Your code should be able to achieve <strong>&gt;150</strong> averaged reward in 10000 iterations (40000 simulation steps) in only a few minutes. This is a good indication that the implementation is correct.</p>
+<h5 id="P2-(10-pts):-Run-A2C-on-CartPole-and-plot-the-learning-curve-(i.e.-averaged-episodic-reward-against-training-iteration).">P2 (10 pts): Run A2C on CartPole and plot the learning curve (i.e. averaged episodic reward against training iteration).<a class="anchor-link" href="#P2-(10-pts):-Run-A2C-on-CartPole-and-plot-the-learning-curve-(i.e.-averaged-episodic-reward-against-training-iteration).">&#182;</a></h5><p>Your code should be able to achieve <strong>&gt;150</strong> averaged reward in 10000 iterations (40000 simulation steps) in only a few minutes. This is a good indication that the implementation is correct.</p>
 
 </div>
 </div>
@@ -13972,7 +13932,60 @@ save checkpoint to cartpole_a2c/9999.pth
 qsub run_a2c.pbs</code></pre>
 <p>The jobs are set to run for at most <strong>14 hours</strong>. <strong><font color=red>Please start early!!</font></strong> You might be able to reach the desired score (&gt;= 200 reward) before 14 hours - You can stop the training early if you wish. Then please collect the resulting <code>breakout_dqn/log.txt</code> and <code>breakout_a2c/log.txt</code> files into the same folder as this Jupyter notebook's. Rename them as <code>log_breakout_dqn.txt</code> and <code>log_breakout_a2c.txt</code>.</p>
 <p>BTW, there's an Atari PC simulator: <a href="https://stella-emu.github.io/">https://stella-emu.github.io/</a> I spent a lot of time playing them...</p>
-<h5 id="P3-[10-pts]:-Run-the-following-cell-to-generate-a-DQN-learning-curve.">P3 [10 pts]: Run the following cell to generate a DQN learning curve.<a class="anchor-link" href="#P3-[10-pts]:-Run-the-following-cell-to-generate-a-DQN-learning-curve.">&#182;</a></h5><p>The <em>maximum</em> average episodic reward on this curve should be larger than $200$ for full credit. (It's ok if the final reward is not as high.) The typical value is around $300$. You get 70% credit if $100 \le$ average episodic reward $&lt; 200$, 50% credit if $50 \le$ average episodic reward $&lt; 100$.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h5 id="C5-(10-pts):-Complete-the-code-for-the-CNN-with-3-conv-layers-and-3-fc-layers-in-class-SimpleCNN-in-file-Model.py">C5 (10 pts): Complete the code for the CNN with 3 conv layers and 3 fc layers in class <code>SimpleCNN</code> in file <code>Model.py</code><a class="anchor-link" href="#C5-(10-pts):-Complete-the-code-for-the-CNN-with-3-conv-layers-and-3-fc-layers-in-class-SimpleCNN-in-file-Model.py">&#182;</a></h5><p>And verify the output shape with the cell below.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">## Test code</span>
+<span class="kn">from</span> <span class="nn">Model</span> <span class="k">import</span> <span class="n">SimpleCNN</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="n">net</span> <span class="o">=</span> <span class="n">SimpleCNN</span><span class="p">()</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">84</span><span class="p">,</span> <span class="mi">84</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">net</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">y</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="s2">&quot;ERROR: network output has the wrong shape!&quot;</span>
+<span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;CNN output shape test passed!&quot;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>CNN output shape test passed!
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h5 id="P3-(10-pts):-Run-the-following-cell-to-generate-a-DQN-learning-curve.">P3 (10 pts): Run the following cell to generate a DQN learning curve.<a class="anchor-link" href="#P3-(10-pts):-Run-the-following-cell-to-generate-a-DQN-learning-curve.">&#182;</a></h5><p>The <em>maximum</em> average episodic reward on this curve should be larger than $200$ for full credit. (It's ok if the final reward is not as high.) The typical value is around $300$. You get 70% credit if $100 \le$ average episodic reward $&lt; 200$, 50% credit if $50 \le$ average episodic reward $&lt; 100$.</p>
 
 </div>
 </div>
@@ -14015,7 +14028,7 @@ qsub run_a2c.pbs</code></pre>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h5 id="P4-[10-pts]:-Run-the-following-cell-to-generate-an-A2C-learning-curve.">P4 [10 pts]: Run the following cell to generate an A2C learning curve.<a class="anchor-link" href="#P4-[10-pts]:-Run-the-following-cell-to-generate-an-A2C-learning-curve.">&#182;</a></h5><p>The <em>maximum</em> average episodic reward on this curve should be larger than $150$ for full credit. (It's ok if the final reward is not as high.) The typical value is around $250$. You get 70% credit if $50 \le$ average episodic reward $&lt; 150$, and 50% credit if $20 \le$ average episodic reward $&lt; 50$.</p>
+<h5 id="P4-(10-pts):-Run-the-following-cell-to-generate-an-A2C-learning-curve.">P4 (10 pts): Run the following cell to generate an A2C learning curve.<a class="anchor-link" href="#P4-(10-pts):-Run-the-following-cell-to-generate-an-A2C-learning-curve.">&#182;</a></h5><p>The <em>maximum</em> average episodic reward on this curve should be larger than $150$ for full credit. (It's ok if the final reward is not as high.) The typical value is around $250$. You get 70% credit if $50 \le$ average episodic reward $&lt; 150$, and 50% credit if $20 \le$ average episodic reward $&lt; 50$.</p>
 
 </div>
 </div>
@@ -14058,7 +14071,7 @@ qsub run_a2c.pbs</code></pre>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h5 id="P5-[10-pts]:-Collect-and-visualize-some-game-frames-by-running-the-script-Draw.py-on-BlueWaters.">P5 [10 pts]: Collect and visualize some game frames by running the script <code>Draw.py</code> on BlueWaters.<a class="anchor-link" href="#P5-[10-pts]:-Collect-and-visualize-some-game-frames-by-running-the-script-Draw.py-on-BlueWaters.">&#182;</a></h5><p>(1) <code>module load python/2.0.0</code> and run <code>Draw.py</code> on BlueWaters (it's ok to run this locally, no need to start a job).</p>
+<h5 id="P5-(10-pts):-Collect-and-visualize-some-game-frames-by-running-the-script-Draw.py-on-BlueWaters.">P5 (10 pts): Collect and visualize some game frames by running the script <code>Draw.py</code> on BlueWaters.<a class="anchor-link" href="#P5-(10-pts):-Collect-and-visualize-some-game-frames-by-running-the-script-Draw.py-on-BlueWaters.">&#182;</a></h5><p>(1) <code>module load python/2.0.0</code> and run <code>Draw.py</code> on BlueWaters (it's ok to run this locally, no need to start a job).</p>
 <p>(2) Download the result <code>breakout_imgs</code> folder from BlueWaters to the folder containing this Jupyter notebook, and run the following cell. You should see some animation of the game.</p>
 
 </div>
@@ -14126,35 +14139,35 @@ qsub run_a2c.pbs</code></pre>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h5 id="Q1-[2-pts]:-Why-would-people-want-to-do-function-approximation-rather-than-using-tabular-algorithm-(on-discretized-S,A-spaces-if-necessary)?-Bringing-function-approximation-has-caused-numerous-problems-theoretically-(e.g.-not-guaranteed-to-converge),-so-it-seems-not-worth-it...">Q1 [2 pts]: Why would people want to do function approximation rather than using tabular algorithm (on discretized S,A spaces if necessary)? Bringing function approximation has caused numerous problems theoretically (e.g. not guaranteed to converge), so it seems not worth it...<a class="anchor-link" href="#Q1-[2-pts]:-Why-would-people-want-to-do-function-approximation-rather-than-using-tabular-algorithm-(on-discretized-S,A-spaces-if-necessary)?-Bringing-function-approximation-has-caused-numerous-problems-theoretically-(e.g.-not-guaranteed-to-converge),-so-it-seems-not-worth-it...">&#182;</a></h5>
+<h5 id="Q1-(2-pts):-Why-would-people-want-to-do-function-approximation-rather-than-using-tabular-algorithm-(on-discretized-S,A-spaces-if-necessary)?-Bringing-function-approximation-has-caused-numerous-problems-theoretically-(e.g.-not-guaranteed-to-converge),-so-it-seems-not-worth-it...">Q1 (2 pts): Why would people want to do function approximation rather than using tabular algorithm (on discretized S,A spaces if necessary)? Bringing function approximation has caused numerous problems theoretically (e.g. not guaranteed to converge), so it seems not worth it...<a class="anchor-link" href="#Q1-(2-pts):-Why-would-people-want-to-do-function-approximation-rather-than-using-tabular-algorithm-(on-discretized-S,A-spaces-if-necessary)?-Bringing-function-approximation-has-caused-numerous-problems-theoretically-(e.g.-not-guaranteed-to-converge),-so-it-seems-not-worth-it...">&#182;</a></h5>
 </div>
 </div>
 </div>Your answer: I don't know. People enjoy "neuralizing" things I guess..
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h5 id="Q2-[2-pts]:-Q-Learning-seems-good...-it's-theoretically-sound-(at-least-seems-to-be),-the-performance-is-also-good.-Why-would-many-people-actually-prefer-policy-gradient-type-algorithms-in-some-practical-problems?">Q2 [2 pts]: Q-Learning seems good... it's theoretically sound (at least seems to be), the performance is also good. Why would many people actually prefer policy gradient type algorithms in some practical problems?<a class="anchor-link" href="#Q2-[2-pts]:-Q-Learning-seems-good...-it's-theoretically-sound-(at-least-seems-to-be),-the-performance-is-also-good.-Why-would-many-people-actually-prefer-policy-gradient-type-algorithms-in-some-practical-problems?">&#182;</a></h5>
+<h5 id="Q2-(2-pts):-Q-Learning-seems-good...-it's-theoretically-sound-(at-least-seems-to-be),-the-performance-is-also-good.-Why-would-many-people-actually-prefer-policy-gradient-type-algorithms-in-some-practical-problems?">Q2 (2 pts): Q-Learning seems good... it's theoretically sound (at least seems to be), the performance is also good. Why would many people actually prefer policy gradient type algorithms in some practical problems?<a class="anchor-link" href="#Q2-(2-pts):-Q-Learning-seems-good...-it's-theoretically-sound-(at-least-seems-to-be),-the-performance-is-also-good.-Why-would-many-people-actually-prefer-policy-gradient-type-algorithms-in-some-practical-problems?">&#182;</a></h5>
 </div>
 </div>
 </div>Your answer: I don't know. I like Q learning. The name is cute. Anyone watch StarTrek?
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h5 id="Q3-[2-pts]:-Does-the-policy-gradient-algorithm-(A2C)-we-implemented-here-extend-to-continuous-action-space?-How-would-you-do-that?-Hint:-What-is-a-reasonable-distribution-assumption-for-policy-$\pi_{\theta}(a|s)$-if-$a$-lives-in-continuous-space?">Q3 [2 pts]: Does the policy gradient algorithm (A2C) we implemented here extend to continuous action space? How would you do that? Hint: What is a reasonable distribution assumption for policy $\pi_{\theta}(a|s)$ if $a$ lives in continuous space?<a class="anchor-link" href="#Q3-[2-pts]:-Does-the-policy-gradient-algorithm-(A2C)-we-implemented-here-extend-to-continuous-action-space?-How-would-you-do-that?-Hint:-What-is-a-reasonable-distribution-assumption-for-policy-$\pi_{\theta}(a|s)$-if-$a$-lives-in-continuous-space?">&#182;</a></h5>
+<h5 id="Q3-(2-pts):-Does-the-policy-gradient-algorithm-(A2C)-we-implemented-here-extend-to-continuous-action-space?-How-would-you-do-that?-Hint:-What-is-a-reasonable-distribution-assumption-for-policy-$\pi_{\theta}(a|s)$-if-$a$-lives-in-continuous-space?">Q3 (2 pts): Does the policy gradient algorithm (A2C) we implemented here extend to continuous action space? How would you do that? Hint: What is a reasonable distribution assumption for policy $\pi_{\theta}(a|s)$ if $a$ lives in continuous space?<a class="anchor-link" href="#Q3-(2-pts):-Does-the-policy-gradient-algorithm-(A2C)-we-implemented-here-extend-to-continuous-action-space?-How-would-you-do-that?-Hint:-What-is-a-reasonable-distribution-assumption-for-policy-$\pi_{\theta}(a|s)$-if-$a$-lives-in-continuous-space?">&#182;</a></h5>
 </div>
 </div>
 </div>Your answer: I don't know. Maybe normalizing flow?? OK, people really do this..(arXiv:1905.06893) Hot area + hot area
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h5 id="Q4-[2-pts]:-The-policy-gradient-algorithm-(A2C)-we-implemented-uses-on-policy-data.-Can-you-think-of-a-way-to-extend-it-to-utilize-off-policy-data?-Hint:-Importance-sampling,-needs-some-approximation-though">Q4 [2 pts]: The policy gradient algorithm (A2C) we implemented uses on-policy data. Can you think of a way to extend it to utilize off-policy data? Hint: Importance sampling, needs some approximation though<a class="anchor-link" href="#Q4-[2-pts]:-The-policy-gradient-algorithm-(A2C)-we-implemented-uses-on-policy-data.-Can-you-think-of-a-way-to-extend-it-to-utilize-off-policy-data?-Hint:-Importance-sampling,-needs-some-approximation-though">&#182;</a></h5>
+<h5 id="Q4-(2-pts):-The-policy-gradient-algorithm-(A2C)-we-implemented-uses-on-policy-data.-Can-you-think-of-a-way-to-extend-it-to-utilize-off-policy-data?-Hint:-Importance-sampling,-needs-some-approximation-though">Q4 (2 pts): The policy gradient algorithm (A2C) we implemented uses on-policy data. Can you think of a way to extend it to utilize off-policy data? Hint: Importance sampling, needs some approximation though<a class="anchor-link" href="#Q4-(2-pts):-The-policy-gradient-algorithm-(A2C)-we-implemented-uses-on-policy-data.-Can-you-think-of-a-way-to-extend-it-to-utilize-off-policy-data?-Hint:-Importance-sampling,-needs-some-approximation-though">&#182;</a></h5>
 </div>
 </div>
 </div>Your answer: I don't know. Do random math tricks or pray?
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h5 id="Q5-[2-pts]:-How-to-compare-different-RL-algorithms?-When-can-I-say-one-algorithm-is-better-than-the-other?-Hint:-This-question-is-quite-open.-Think-about-speed,-complexity,-tasks,-etc.">Q5 [2 pts]: How to compare different RL algorithms? When can I say one algorithm is better than the other? Hint: This question is quite open. Think about speed, complexity, tasks, etc.<a class="anchor-link" href="#Q5-[2-pts]:-How-to-compare-different-RL-algorithms?-When-can-I-say-one-algorithm-is-better-than-the-other?-Hint:-This-question-is-quite-open.-Think-about-speed,-complexity,-tasks,-etc.">&#182;</a></h5>
+<h5 id="Q5-(2-pts):-How-to-compare-different-RL-algorithms?-When-can-I-say-one-algorithm-is-better-than-the-other?-Hint:-This-question-is-quite-open.-Think-about-speed,-complexity,-tasks,-etc.">Q5 (2 pts): How to compare different RL algorithms? When can I say one algorithm is better than the other? Hint: This question is quite open. Think about speed, complexity, tasks, etc.<a class="anchor-link" href="#Q5-(2-pts):-How-to-compare-different-RL-algorithms?-When-can-I-say-one-algorithm-is-better-than-the-other?-Hint:-This-question-is-quite-open.-Think-about-speed,-complexity,-tasks,-etc.">&#182;</a></h5>
 </div>
 </div>
 </div>Your answer: I don't know. Just pick one you like, they're equally bad..
