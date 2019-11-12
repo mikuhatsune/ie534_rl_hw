@@ -1,0 +1,16 @@
+python Main.py  \
+    --niter 10000   \
+    --env CartPole-v1   \
+    --algo a2c  \
+    --nproc 4   \
+    --lr 0.001  \
+    --train_freq 16 \
+    --train_start 0 \
+    --batch_size 64     \
+    --discount 0.996    \
+    --value_coef 0.01    \
+    --print_freq 200    \
+    --checkpoint_freq 20000 \
+    --save_dir cartpole_a2c \
+    --log log.txt \
+    --parallel_env 0

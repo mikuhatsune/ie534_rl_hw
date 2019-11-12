@@ -1,0 +1,15 @@
+#!/bin/bash
+#PBS -l nodes=1:ppn=4:xk
+#PBS -l walltime=14:00:00
+#PBS -N breakout_dqn
+#PBS -e $PBS_JOBID.err
+#PBS -o $PBS_JOBID.out
+# -m and -M set up mail messages at begin,end,abort:
+# -m bea
+# -M YOUR_NETID@illinois.edu
+
+#cd /u/training/instr029
+#. /opt/modules/default/init/bash
+module load python/2.0.0
+#module load cudatoolkit
+aprun -n 1 -N 1 python Main.py
