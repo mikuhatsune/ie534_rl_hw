@@ -3,9 +3,12 @@
 #### Getting Started
 You can either:
 
-* Fork your own copy of the repo, and work on it
-* or, download a zip file containing everything: https://github.com/mikuhatsune/ie534_rl_hw/archive/master.zip
-* or, directly clone the repo to local (not recommended):
+* ~~Fork your own copy of the repo, and work on it~~
+  Just realized this is probably not a good idea, because you can see other people's solutions...
+Try to do a private fork then: https://stackoverflow.com/questions/10065526/github-how-to-make-a-fork-of-public-repository-private
+
+* or, download a zip file containing everything: https://github.com/mikuhatsune/ie534_rl_hw/archive/master.zip (**recommended**)
+* or, directly clone the repo to local:
 ```bash
 git clone https://github.com/mikuhatsune/ie534_rl_hw.git
 ```
