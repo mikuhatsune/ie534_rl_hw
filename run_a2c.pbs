@@ -10,5 +10,6 @@
 
 #. /opt/modules/default/init/bash
 module load python/2.0.0
+pip install gym[atari]==0.14 --user
 #module load cudatoolkit
 aprun -n 1 -N 1 python Main.py --algo a2c --niter 1000000 --lr 0.0006 --nproc 8 --train_freq 16 --batch_size 128 --train_start 0 --save_dir breakout_a2c --checkpoint_freq 250000

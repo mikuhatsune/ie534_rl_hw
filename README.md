@@ -27,3 +27,10 @@ time, rem: time passed, estimated time remain
 
 iter    500 |loss   0.00 |n_ep    28 |ep_len   31.3 |ep_rew  -0.22 |raw_ep_rew   1.76 |env_step   1000 |time 00:04 rem 281:49
 ```
+
+#### Important
+Run these commands once to make BlueWaters happy (install a newer version of gym):
+```bash
+module load python/2.0.0
+pip install gym[atari]==0.14 --user
+```
