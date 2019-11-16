@@ -278,7 +278,7 @@ class ActorCritic:
     def load(self, path):
         states = torch.load(path, map_location=self.device)
         if self.shared_net:
-            self.actor.load_state_dict(states[0])
+            self.actor_and_critic.load_state_dict(states[0])
         else:
             self.actor.load_state_dict(states[0])
             self.critic.load_state_dict(states[1])
